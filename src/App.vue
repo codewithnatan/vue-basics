@@ -6,14 +6,20 @@ const counter = ref(0)
 
 // 2. Eine Funktion erstellen, die den Zähler um 1 erhöht
 function increaseCounter() {
-  counter.value = counter.value + 1
+  counter.value++
 }
 
 // 3. Eine Funktion erstellen, die den Zähler um 1 herunterzählt
-
 function decreaseCounter() {
-  counter.value = counter.value -1
+  counter.value--
 }
+
+// NEU: Ein Array (eine Liste) mit deinen lieblings Programiersprachen
+const languages = ref ([
+  {id: 1, name: 'HTML & CSS'},
+  {id: 2, name: 'JavaScript'},
+  {id: 3, name: 'Vue 3'},
+])
 
 </script>
 
@@ -49,6 +55,17 @@ function decreaseCounter() {
           Alles im grünen Bereich. Klicke weiter!
         </p>
 
+        <!-- Hier startet die Schleife -->
+         <div class="list-container">
+          <h2>Meine Tech-Stack Liste:</h2>
+          <ul>
+            <!-- Für 'jedes' lang in der Liste 'languages' erstelle ein <li> -->
+            <li v-for="lang in languages" :key="lang.id">
+              {{ lang.name }}
+            </li>
+          </ul>
+         </div>
+
      </div>
 
   </main>
@@ -62,4 +79,9 @@ button { padding: 10px 20px; margin: 5px; font-size: 1rem; background-color: #42
 .message-container {margin-top: 30px; height: 50px;}
 .warning {color: red; font-weight: bold;}
 .info {color: #666; font-style: italic;}
+
+/* Styles für die neue Liste */
+.list-container {margin-top: 40px; text-align: left; display: inline-block;}
+ul {list-style: none; padding: 0;}
+li {font-size: 1.2rem; padding: 5px 0; color: #2c3e50;}
 </style>
