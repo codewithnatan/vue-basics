@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 
-// 1. Eine reaktive Variable erstellen (Startwert ist 0 
+// 1. Eine (Counter-Logik) reaktive Variable erstellen (Startwert ist 0)
 const counter = ref(0)
 
 // 2. Eine Funktion erstellen, die den Zähler um 1 erhöht
@@ -20,6 +20,21 @@ const languages = ref ([
   {id: 2, name: 'JavaScript'},
   {id: 3, name: 'Vue 3'},
 ])
+
+// Eine leere Varibale, die den Text aus dem Eingabefeld auffängt
+const newLanguageName = ref ('')
+
+// Hier fügen wir eine Neue Sprache in die Liste hinzu
+function addNewLanguages() {
+  if (newLanguageName.value === '') return
+
+  languages.value.push({
+    id: languages.value.push + 1,
+    name: newLanguageName.value
+  })
+
+  newLanguageName.value = ''
+}
 
 </script>
 
@@ -55,13 +70,21 @@ const languages = ref ([
           Alles im grünen Bereich. Klicke weiter!
         </p>
 
+        <!-- Das Eingabefeld (Hier macht v-model seine Arbeit) -->
+         <div class="input-container">
+          <h2>Füge eine neue Sprache hinzu:</h2>
+          <input v-model="newLanguageName" @keyup.enter="addNewLanguages" type="text" placeholder="z.B. TypeScript..."/>
+          <!-- Live-Vorschau, um zu sehen, was im Hintergrund passiert -->
+           <p class="preview">Du tippst gerade: <strong>{{ newLanguageName }}</strong></p>
+         </div>
+
         <!-- Hier startet die Schleife -->
          <div class="list-container">
           <h2>Meine Tech-Stack Liste:</h2>
           <ul>
             <!-- Für 'jedes' lang in der Liste 'languages' erstelle ein <li> -->
             <li v-for="lang in languages" :key="lang.id">
-              {{ lang.name }}
+             🚀 {{ lang.name }}
             </li>
           </ul>
          </div>
@@ -84,4 +107,9 @@ button { padding: 10px 20px; margin: 5px; font-size: 1rem; background-color: #42
 .list-container {margin-top: 40px; text-align: left; display: inline-block;}
 ul {list-style: none; padding: 0;}
 li {font-size: 1.2rem; padding: 5px 0; color: #2c3e50;}
+
+/* Styles für das Eingabefeld */
+.input-container {margin-top: 30px;}
+input {padding: 10px; font-size: 1rem; border: 2px solid #42b883; border-radius: 4px; width: 250px;}
+.preview {font-size: 1rem; color: #7f8c8d; margin-top: 10px;}
 </style>
