@@ -36,6 +36,14 @@ function addNewLanguages() {
   newLanguageName.value = ''
 }
 
+// Die Löschen-Funktion
+// Diese Funktion bekommt die ID von dem Element, das weg soll
+function deleteLanguage(idToDelete) {
+  // .filter() ist ein eingebauter JavaScript-Befehl für Arrays.
+  // Er geht die Liste durch und behält nur die Elemente, bei denen die Bedingung stimmt.
+  languages.value = languages.value.filter(lang => lang.id !== idToDelete)
+}
+
 </script>
 
 <template>
@@ -85,6 +93,11 @@ function addNewLanguages() {
             <!-- Für 'jedes' lang in der Liste 'languages' erstelle ein <li> -->
             <li v-for="lang in languages" :key="lang.id">
              🚀 {{ lang.name }}
+
+             <!-- Der Löschen-Button neben jedem Element -->
+              <!-- Wenn man klickt (@click), rufrn wir deleteLanguage auf -->
+               <!-- Wir übergeben genau die ID von dieser Sprache lang.id -->
+                <button class="delete-btn" @click="deleteLanguage(lang.id)">❌</button>
             </li>
           </ul>
          </div>
@@ -112,4 +125,8 @@ li {font-size: 1.2rem; padding: 5px 0; color: #2c3e50;}
 .input-container {margin-top: 30px;}
 input {padding: 10px; font-size: 1rem; border: 2px solid #42b883; border-radius: 4px; width: 250px;}
 .preview {font-size: 1rem; color: #7f8c8d; margin-top: 10px;}
+
+/* Schickes Styling für das rote x */
+.delete-btn {background: none; border: none; color: red; cursor: pointer; font-size: 1rem; padding: 0 5px; margin-left: 10px;}
+.delete-btn:hover {transform: scale(1.2);}
 </style>
