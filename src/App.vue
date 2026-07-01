@@ -24,10 +24,23 @@ const languages = ref ([
 // Eine leere Varibale, die den Text aus dem Eingabefeld auffängt
 const newLanguageName = ref ('')
 
-// Hier fügen wir eine Neue Sprache in die Liste hinzu
+// Hier fügen wir eine Neue Sprache in die Liste hinzu und prüfen, ob nach dem Trimmen das Feld leer ist
 function addNewLanguages() {
-  if (newLanguageName.value === '') return
+  // ... und prüfen, ob nach dem Trimmen das Feld leer ist
+  if (newLanguageName.value.trim() === '') return
 
+  // Existiert der Name schon in der Liste
+// .some() wandert durch die Liste
+// und prüft, ob der eingegebne Name (kleingeschrieben) schon existiert
+const alreadyExists = languages.value.some(
+  lang => lang.name.toLowerCase() === newLanguageName.value.trim().toLowerCase()
+)
+// Wenn alreadyExist wahr (true) ist, brechen wir sofort ab
+if(alreadyExists) {
+  alert('Diese Sprache ist schon in der Liste')
+  return
+}
+// Wenn beide Checks bestanden sind abi in die Liste
   languages.value.push({
     id: languages.value.push + 1,
     name: newLanguageName.value
