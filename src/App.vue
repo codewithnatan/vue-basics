@@ -16,9 +16,9 @@ function decreaseCounter() {
 
 // NEU: Ein Array (eine Liste) mit deinen lieblings Programiersprachen
 const languages = ref ([
-  {id: 1, name: 'HTML & CSS'},
-  {id: 2, name: 'JavaScript'},
-  {id: 3, name: 'Vue 3'},
+  {id: 1, name: 'HTML & CSS', isEditig: false},
+  {id: 2, name: 'JavaScript', isEditig: false},
+  {id: 3, name: 'Vue 3', isEditig: false},
 ])
 
 // Eine leere Varibale, die den Text aus dem Eingabefeld auffängt
@@ -43,7 +43,8 @@ if(alreadyExists) {
 // Wenn beide Checks bestanden sind abi in die Liste
   languages.value.push({
     id: languages.value.push + 1,
-    name: newLanguageName.value
+    name: newLanguageName.value,
+    isEditig: false // Startet ganz normal als Text
   })
 
   newLanguageName.value = ''
@@ -55,6 +56,22 @@ function deleteLanguage(idToDelete) {
   // .filter() ist ein eingebauter JavaScript-Befehl für Arrays.
   // Er geht die Liste durch und behält nur die Elemente, bei denen die Bedingung stimmt.
   languages.value = languages.value.filter(lang => lang.id !== idToDelete)
+}
+
+function toggleEdit(lang) {
+  // Wenn wir gerade im Edit-Modus sind
+  // und auf Speichern drückt, prüfen wir zuerst den Text
+  if (lang.isEditig) {
+  // Wenn das Feld nach dem Trimmen komplet leer ist ...
+  if(lang.name.trim() === '') {
+  alert('Der Name darf nicht leer sein!')
+  }
+  // Wenn der Text gültig ist, trimmen wir ihn vor dem Speichern
+  lang.name = lang.name.trim()
+  }
+  // Wenn es false war, wird es true. Wenn es true war, wird es false
+  // Das Aufrufezeichen ! kehrt den Wert einfach um (wie ein Lichtschalter).
+  lang.isEditig = !lang.isEditig
 }
 
 </script>
@@ -105,6 +122,18 @@ function deleteLanguage(idToDelete) {
           <ul>
             <!-- Für 'jedes' lang in der Liste 'languages' erstelle ein <li> -->
             <li v-for="lang in languages" :key="lang.id">
+              <!-- Wenn wir im Edit-Modus sind: Zeige das Eingabefeld -->
+               <div v-if="lang.isEditig">
+                <input v-model="lang.name" type="text"/>
+                <button @click="toggleEdit(lang)">Speichern</button>
+               </div>
+
+               <!-- Ansonsten: Zeige den ganz normalen Text und den Bearbeiten-Button -->
+                <div v-else>
+                  <span>{{ lang.name }}</span>
+                  <button @click="toggleEdit(lang)">Bearbeiten</button>
+                  <button @click="deleteLanguage(lang.id)">Löschen</button>
+                </div>
              🚀 {{ lang.name }}
 
              <!-- Der Löschen-Button neben jedem Element -->
