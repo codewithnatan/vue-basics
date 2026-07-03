@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 
 // 1. Eine (Counter-Logik) reaktive Variable erstellen (Startwert ist 0)
 const counter = ref(0)
@@ -23,6 +23,23 @@ const languages = ref ([
 
 // Eine leere Varibale, die den Text aus dem Eingabefeld auffängt
 const newLanguageName = ref ('')
+
+// Wenn die App im Browser geldaen wird ...
+onMounted( () => {
+  const savedLanguage = localStorage.getItem('myLanguages') // Hol die Daten
+
+  if (savedLanguage) {
+    // Da im localStorage nur Text gespeichert werden kann,
+    // verwandeln wir den Text mit JSON.parse in echte JavaScript-Objekte
+    languages.value = JSON.parse(savedLanguage)
+  }
+} )
+
+// Wir beobachten usere Sprachen-Liste
+watch(languages, (newLanguages) => {
+  // Wir verwandeln die Liste in Text (String) und speichern sie im Browser ab
+  localStorage.setItem('myLanguages', JSON.stringify(newLanguages))
+}, {deep: true}) // Deep ist pflicht. Es guckt auch in die Objekte (z.B. wenn sich nur der Name ändert)
 
 // Hier fügen wir eine Neue Sprache in die Liste hinzu und prüfen, ob nach dem Trimmen das Feld leer ist
 function addNewLanguages() {
