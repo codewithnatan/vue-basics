@@ -95,7 +95,7 @@ function toggleEdit(lang) {
 
 <template>
   <main>
-  <h1>Mein erster Vue 3 Baustein</h1>
+  <h1 class="text-4xl font-bold text-blue-500 underline">Mein erster Vue 3 Baustein</h1>
 
   <!-- Text-Interpolation: Zeigt den aktuellen Wert derVariable an -->
    <p>Aktuelle Klicks {{ counter }}</p>
@@ -168,7 +168,6 @@ function toggleEdit(lang) {
 
 <style scoped>
 main { font-family: sans-serif; text-align: center; margin-top: 5%; }
-h1 { color: #42b883; }
 p { font-size: 1.5rem; }
 button { padding: 10px 20px; margin: 5px; font-size: 1rem; background-color: #42b883; color: white; border: none; border-radius: 5px; cursor: pointer; }
 .message-container {margin-top: 30px; height: 50px;}
