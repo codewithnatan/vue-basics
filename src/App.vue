@@ -6,7 +6,7 @@ const counter = ref(0)
 
 // 2. Eine Funktion erstellen, die den Zähler um 1 erhöht
 function increaseCounter() {
-  counter.value++
+ counter.value++
 }
 
 // 3. Eine Funktion erstellen, die den Zähler um 1 herunterzählt
@@ -105,19 +105,6 @@ function toggleEdit(lang) {
           Sprachen-Planer
         </h1>
 
-              <!-- Text-Interpolation: Zeigt den aktuellen Wert derVariable an -->
-            <!-- <p>Aktuelle Klicks {{ counter }}</p> -->
-
-            <!-- Ein Event-Klick: Löst die Funktion aus -->
-           <!-- <button @click="increaseCounter">Plus (+)</button> -->
-
-              <!-- Ein Event-Klick: Löst die Funktion aus -->
-             <!-- <button @click="decreaseCounter">Minus (-)</button> -->
-
-              <!-- Hierr startet das WENN/DANN Prinzip -->
-
-             <!-- <div class="message-container"> -->
-
             <!-- Wenn der Zähler größer oder gleich 5 ist -->
             <p v-if="counter >= 5" class="warning">
              Achtung: Du hast 5 oder mehr Klicks erreicht!
@@ -127,11 +114,6 @@ function toggleEdit(lang) {
              <p v-else-if="counter < 0" class="warning">
                 Du bist im minus Bereich!
              </p>
-
-               <!-- Wenn die obere Bedingung NICHT zutrifft -->
-            <!-- <p v-else class="info">
-                Alles im grünen Bereich. Klicke weiter!
-              </p> -->
 
               <!-- Das Eingabefeld (Hier macht v-model seine Arbeit) -->
          <div class="flex gap-2 mb-6">
@@ -148,13 +130,9 @@ function toggleEdit(lang) {
             >
           Hinzufügen
           </button>
-
-          <!-- Live-Vorschau, um zu sehen, was im Hintergrund passiert -->
-          <!-- <p class="preview">Du tippst gerade: <strong>{{ newLanguageName }}</strong></p> -->
          </div>
 
         <!-- Hier startet die Schleife -->
-        <!-- <div class="list-container"> -->
           <!-- Der Titel für die Tech-Stack Liste -->
           <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 mt-6">Meine Tech-Stack Liste:</h2>
           <!-- Die Liste als Container -->
@@ -201,17 +179,16 @@ function toggleEdit(lang) {
 
             </div>
                
-             <!--🚀 {{ lang.name }} -->
-
-             <!-- Der Löschen-Button neben jedem Element -->
-              <!-- Wenn man klickt (@click), rufrn wir deleteLanguage auf -->
-               <!-- Wir übergeben genau die ID von dieser Sprache lang.id -->
-              <!--  <button class="delete-btn" @click="deleteLanguage(lang.id)">❌</button> -->
             </li>
           </ul>
-        <!-- </div> -->
 
-          <!-- </div> -->
+          <!-- Der Statistik-Bereich -->
+           <div class="mt-6 pt-4 border-t border-gray-200 flex items-center justify-between text-sm">
+            <span class="text-gray-500 font-medium">Gesamtfortschitt:</span>
+            <span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 font-semibold rounded-full border border-indigo-100">
+              {{ languages.length }} {{ languages.length === 1 ? 'sprache' : 'sprachen' }}
+            </span>
+           </div>
 
       </div>  <!-- Schließt die weiße App-Karte -->
     </div> <!-- Schließt den Haupt-Hintergrund -->
@@ -219,24 +196,4 @@ function toggleEdit(lang) {
 </template>
 
 <style scoped>
-/* main { font-family: sans-serif; text-align: center; margin-top: 5%; } */
-p { font-size: 1.5rem; }
-/*button { padding: 10px 20px; margin: 5px; font-size: 1rem; background-color: #42b883; color: white; border: none; border-radius: 5px; cursor: pointer; }
-.message-container {margin-top: 30px; height: 50px;}
-.warning {color: red; font-weight: bold;}
-.info {color: #666; font-style: italic;} */
-
-/* Styles für die neue Liste */
-/*.list-container {margin-top: 40px; text-align: left; display: inline-block;}
-ul {list-style: none; padding: 0;}
-li {font-size: 1.2rem; padding: 5px 0; color: #2c3e50;}
-
-/* Styles für das Eingabefeld */
-/*.input-container {margin-top: 30px;}
-input {padding: 10px; font-size: 1rem; border: 2px solid #42b883; border-radius: 4px; width: 250px;}
-.preview {font-size: 1rem; color: #7f8c8d; margin-top: 10px;}
-
-/* Schickes Styling für das rote x */
-/* .delete-btn {background: none; border: none; color: red; cursor: pointer; font-size: 1rem; padding: 0 5px; margin-left: 10px;}
-.delete-btn:hover {transform: scale(1.2);} */
 </style>
