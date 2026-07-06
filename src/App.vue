@@ -106,14 +106,14 @@ function toggleEdit(lang) {
         </h1>
 
             <!-- Wenn der Zähler größer oder gleich 5 ist -->
-            <p v-if="counter >= 5" class="warning">
+            <!--<p v-if="counter >= 5" class="warning">
              Achtung: Du hast 5 oder mehr Klicks erreicht!
-            </p>
+            </p> -->
 
              <!-- Wenn der Zähler kleiner 0 ist -->
-             <p v-else-if="counter < 0" class="warning">
+           <!--  <p v-else-if="counter < 0" class="warning">
                 Du bist im minus Bereich!
-             </p>
+             </p> -->
 
               <!-- Das Eingabefeld (Hier macht v-model seine Arbeit) -->
          <div class="flex gap-2 mb-6">
@@ -135,13 +135,18 @@ function toggleEdit(lang) {
         <!-- Hier startet die Schleife -->
           <!-- Der Titel für die Tech-Stack Liste -->
           <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 mt-6">Meine Tech-Stack Liste:</h2>
-          <!-- Die Liste als Container -->
-          <ul class="space-y-3">
+
+          <!-- Die Liste als Container mit TransitionGroup -->
+         <TransitionGroup
+         tag="ul"
+         name="list"
+         class="space-y-2 block relative"
+         >
             <!-- Für 'jedes' lang in der Liste 'languages' erstelle ein <li> -->
             <li 
             v-for="lang in languages" 
             :key="lang.id" 
-            class="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors">
+            class="flex items-center justify-between p-3 bg-gray-50 rounded-lg transition-all duration-300">
 
               <!-- Wenn wir im Edit-Modus sind: Zeige das Eingabefeld -->
               <div v-if="lang.isEditig" class="flex item-center gap-2 w-full">
@@ -167,7 +172,7 @@ function toggleEdit(lang) {
 
                   <button 
                   @click="toggleEdit(lang)"
-                  class="px-3 px-1 text-sm bg-amber-500 text-white rounded-md hover:bg-amber-600 transiton-colors"
+                  class="px-3 py-1 text-sm bg-amber-500 text-white rounded-md hover:bg-amber-600 transiton-colors"
                   >Bearbeiten</button>
 
                   <button 
@@ -180,7 +185,7 @@ function toggleEdit(lang) {
             </div>
                
             </li>
-          </ul>
+          </TransitionGroup>
 
           <!-- Der Statistik-Bereich -->
            <div class="mt-6 pt-4 border-t border-gray-200 flex items-center justify-between text-sm">
@@ -195,5 +200,31 @@ function toggleEdit(lang) {
   </main>
 </template>
 
-<style scoped>
+<style>
+/* 1. Zustand vor dem erscheinen / nach dem löschen */
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+/* 2. Während die Animation läuft */
+.list-enter-active,
+.list-leave-active {
+transition: all 0.3s ease;
+}
+
+/* 3. Sorgt dafür, dass die anderen Elemente weich nachrücken */
+.list-move {
+  transition: transform 0.3s ease;
+}
+
+/* Damit das gelöschte Element weich herausgleitet */
+.list-leave-active {
+  position: absolute;
+  width: 100%;
+  /* Sorgt beim Löschen, dass die Box ihre Breite behält */
+  left: 0;
+  right: 0;
+}
 </style>
