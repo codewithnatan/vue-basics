@@ -16,9 +16,9 @@ function decreaseCounter() {
 
 // NEU: Ein Array (eine Liste) mit deinen lieblings Programiersprachen
 const languages = ref ([
-  {id: 1, name: 'HTML & CSS', isEditig: false},
-  {id: 2, name: 'JavaScript', isEditig: false},
-  {id: 3, name: 'Vue 3', isEditig: false},
+  {id: 1, name: 'HTML & CSS', isEditig: false, done: false},
+  {id: 2, name: 'JavaScript', isEditig: false, done: false},
+  {id: 3, name: 'Vue 3', isEditig: false, done: false},
 ])
 
 // Eine leere Varibale, die den Text aus dem Eingabefeld auffängt
@@ -61,6 +61,7 @@ if(alreadyExists) {
   languages.value.push({
     id: Date.now(),
     name: newLanguageName.value.trim(),
+    done: false,
     isEditig: false // Startet ganz normal als Text
   })
 
@@ -148,6 +149,13 @@ function toggleEdit(lang) {
             :key="lang.id" 
             class="flex items-center justify-between p-3 bg-gray-50 rounded-lg transition-all duration-300">
 
+            <!-- Die Checkbox ganz links -->
+             <div class="flex items-center space-x-3">
+              <input type="checkbox"
+              v-model="lang.done"
+              class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:riing-indigo-500 cursor-pointer">
+             </div>
+
               <!-- Wenn wir im Edit-Modus sind: Zeige das Eingabefeld -->
               <div v-if="lang.isEditig" class="flex item-center gap-2 w-full">
                 <input
@@ -164,9 +172,9 @@ function toggleEdit(lang) {
                <!-- Ansonsten: Zeige den ganz normalen Text und den Bearbeiten-Button -->
             <div v-else class="flex items-center justify-between w-full">
                   <!-- Text mit Raketen-Emoji -->
-                  <span class="text-gray-700 font-medium flex item-center gap-2">🚀 {{ lang.name }}</span>
+                  <!-- Text-Span, den wir dynamiscg stylen -->
+                  <span :class="{'line-through text-gray-400 italic': lang.done }">🚀 {{ lang.name }}</span>
                    
-
                   <!-- Die Buttons rechts sauber nebeneinander -->
                 <div class="flex items-center gap-2">
 
