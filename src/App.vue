@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 
 // 1. Eine (Counter-Logik) reaktive Variable erstellen (Startwert ist 0)
 const counter = ref(0)
@@ -92,6 +92,16 @@ function toggleEdit(lang) {
   lang.isEditig = !lang.isEditig
 }
 
+// 1. Zähler: Wie viele Sprachen gibt es insgesamtt?
+const totalLanguages = computed(() => {
+return languages.value.length
+})
+
+// 2. Zähler: Wie viele Sprachen haben das done-Flage auf true?
+const completedLanguages = computed(() => {
+  return languages.value.filter(lang => lang.done).length
+})
+
 </script>
 
 <template>
@@ -136,6 +146,24 @@ function toggleEdit(lang) {
         <!-- Hier startet die Schleife -->
           <!-- Der Titel für die Tech-Stack Liste -->
           <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 mt-6">Meine Tech-Stack Liste:</h2>
+
+          <!-- Der Statistik-Bereich -->
+           <div class="bg-indigo-50 p-4 rounded-xl mb-6 text-center border border-indigo-100">
+            <p class="text-sm font-medium text-indigo-900">
+              Dein Lernfortschritt:
+            <span class="font-bold text-indigo-600">{{ completedLanguages }}</span>
+            von
+            <span class="font-bold text-indigo-600">{{ totalLanguages }}</span>
+            gelernt
+             </p>
+
+            <!-- Ein kleiner dynamischer Fortschrittsbalken -->
+             <div class="w-full bg-gray-200 h-2 rounded-full mt-2 overflow-hidden">
+              <div 
+              class="bg-indigo-600 h-2 transition-all duration-500" :style="{ width: totalLanguages > 0 ? `${(completedLanguages / totalLanguages) * 100}%` : '0%' }">
+            </div>
+             </div>
+           </div>
 
           <!-- Die Liste als Container mit TransitionGroup -->
          <TransitionGroup
