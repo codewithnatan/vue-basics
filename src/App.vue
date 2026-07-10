@@ -1,5 +1,6 @@
 <script setup>
-import { ref, watch, onMounted, computed } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue';
+import { supabase } from './supabase';
 
 // 1. Eine (Counter-Logik) reaktive Variable erstellen (Startwert ist 0)
 const counter = ref(0)
@@ -23,6 +24,32 @@ const languages = ref ([
 
 // Eine leere Varibale, die den Text aus dem Eingabefeld auffängt
 const newLanguageName = ref ('')
+
+// Unsere neue Cloud-Funktion
+const addLanguageToCloud = async () => {
+// Sicherheits-Check: Leere Eingaben ignorieren
+if (!newLanguageName.value.trim()) return
+
+try {
+  // Wir funken an Supabase: Füge in die Tabelle languages diesen Datensatz ein
+  const { data, error } = await supabase
+  .from('languages')
+  .insert([
+    { name: newLanguageName.value, is_completed: false }
+  ])
+  .select() // Das holt uns den Datensatz
+
+  if (error) throw error
+
+  console.log('Erfolgreich in der Cloud gespeichert', data)
+
+  // Eingabefeld wider leeren
+  newLanguageName.value = ''
+} catch (error) {
+  console.error('Fehler beim Speichern in Supabase:', error.message)
+  alert('Da ging beim Speichern in der Cloud was schief!')
+}
+}
 
 // Wenn die App im Browser geldaen wird ...
 onMounted( () => {
@@ -131,12 +158,12 @@ const completedLanguages = computed(() => {
               <input 
               id="new-language-input"
               v-model="newLanguageName" 
-                  @keyup.enter="addNewLanguages"
+                  @keyup.enter="addLanguageToCloud"
                     type="text" 
                     placeholder="Füge eine neue Sprache hinzu..."
                   class="flex-1 px-4 py-2 border border-gray-300 rounded-leg foocus:riing-indigo-500 focus:border-transparent"/>
                 <button
-                 @click="addNewLanguages"
+                 @click="addLanguageToCloud"
             class="px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors"
             >
           Hinzufügen
