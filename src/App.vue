@@ -2,6 +2,11 @@
 import { ref, watch, onMounted, computed } from 'vue';
 import { supabase } from './supabase';
 
+// Lade-Funktion aufruufen
+onMounted(() => {
+  fetchLanguageFromCloud()
+})
+
 // 1. Eine (Counter-Logik) reaktive Variable erstellen (Startwert ist 0)
 const counter = ref(0)
 
@@ -41,6 +46,10 @@ try {
 
   if (error) throw error
 
+  if (data && data.length > 0) {
+      languages.value.push(data[0]) // Pack die neue Cloud-Sprache direkt ans Ende der Liste
+    }
+
   console.log('Erfolgreich in der Cloud gespeichert', data)
 
   // Eingabefeld wider leeren
@@ -49,6 +58,69 @@ try {
   console.error('Fehler beim Speichern in Supabase:', error.message)
   alert('Da ging beim Speichern in der Cloud was schief!')
 }
+}
+
+// Hier holen wir uns die Daten von der Cloud
+const fetchLanguageFromCloud = async () => {
+  try {
+    // Wir sagen Supabase: Gib mir alle Spalten aus der Tabelle languages
+    const { data, error } = await supabase
+    .from('languages')
+    .select('*')
+    .order('id', { ascending: true }) // Sortiert sie nach ID
+
+    if (error) throw error
+
+    languages.value = data
+
+    console.log('Sprache erfolgreich geladen:', data)
+
+  } catch (error) {
+    console.error('Fehler beim Laden aus Supabase:', error.message)
+    alert('Die Sprachen konnten nicht geladen werden.')
+  }
+}
+
+const deleteLanguageFromCloud = async (id) => {
+  try {
+    // Wir sagen Supabase: Lösche die Zeile aus languages , wo die ID übereinstimmt
+    const { error } = await supabase
+    .from('languages')
+    .delete()
+    .eq('id', id) // Filtert genau nach dieser ID
+
+    if (error) throw error
+
+    console.log('Erfolgreich aus der Cloud gelöscht!')
+
+    // Jetzt löschen wir es aus der Vue-Liste
+    languages.value = languages.value.filter(lang => lang.id !== id)
+
+  } catch (error) {
+    console.error('Fehler beim Löschen in Supabase:', error.message)
+    alert ('Konnte das Element nicht aus der Cloud Löschen.')
+  }
+}
+
+const updateLanguageInCloud = async (lang) => {
+  try {
+    // Wir sagen Supabase: Aktualisiere diese Zeile mit den neuen Werten
+    const { error } = await supabase
+    .from('languages')
+    .update({
+      name: lang.name,
+      is_completed: lang.is_completed
+    })
+    .eq('id', lang.id) // Genau die Zeiler mit dieser ID
+
+    if (error) throw error
+
+    console.log('Erfolgreich in der Cloud aktualisiert!')
+
+  } catch {
+    console.error('Fehler bei Aktualisiern in Supabase:', error.message)
+    alert('Konnte die Änderung in der Cloud speichern.')
+  }
 }
 
 // Wenn die App im Browser geldaen wird ...
@@ -208,6 +280,7 @@ const completedLanguages = computed(() => {
              <div class="flex items-center space-x-3">
               <input type="checkbox"
               v-model="lang.done"
+              @change="updateLanguageInCloud(lang)"
               class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:riing-indigo-500 cursor-pointer">
              </div>
 
@@ -239,7 +312,7 @@ const completedLanguages = computed(() => {
                   >Bearbeiten</button>
 
                   <button 
-                  @click="deleteLanguage(lang.id)"
+                  @click="deleteLanguageFromCloud(lang.id)"
                   class="px-3 py-1 text-sm bg-rose-600 text-white rounded-md hover:bg-rose-700 transition-colors"
                   >Löschen</button>
 
